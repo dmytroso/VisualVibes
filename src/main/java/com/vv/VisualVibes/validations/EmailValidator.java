@@ -1,9 +1,8 @@
 package com.vv.VisualVibes.validations;
 
 import com.vv.VisualVibes.annotations.ValidEmail;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
-
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -16,7 +15,7 @@ public class EmailValidator implements ConstraintValidator<ValidEmail, String> {
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
+    public boolean isValid(String value, ConstraintValidatorContext constraintValidatorContext) {
         return validateEmail(value);
     }
 

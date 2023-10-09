@@ -2,8 +2,8 @@ package com.vv.VisualVibes.validations;
 
 import com.vv.VisualVibes.annotations.PasswordMathes;
 import com.vv.VisualVibes.payload.request.SignUpRequest;
-import jakarta.validation.ConstraintValidator;
-import jakarta.validation.ConstraintValidatorContext;
+import javax.validation.ConstraintValidator;
+import javax.validation.ConstraintValidatorContext;
 
 
 public class PasswordMatchesValidator implements ConstraintValidator<PasswordMathes, Object> {
@@ -14,8 +14,9 @@ public class PasswordMatchesValidator implements ConstraintValidator<PasswordMat
     }
 
     @Override
-    public boolean isValid(Object value, ConstraintValidatorContext context) {
+    public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
         SignUpRequest signUpRequest = (SignUpRequest) value;
         return signUpRequest.getPassword().equals(signUpRequest.getConfirmPassword());
     }
+
 }

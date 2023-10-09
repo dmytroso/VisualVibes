@@ -13,40 +13,42 @@ import java.util.Map;
 
 @Component
 public class JWTTokenProvider {
-    private final Logger LOG = LoggerFactory.getLogger(JWTTokenProvider.class);
+    public static final Logger LOG = LoggerFactory.getLogger(JWTTokenProvider.class);
 
-    public String generationToken(Authentication authentication) {
+    public String generateToken(Authentication authentication) {
         User user = (User) authentication.getPrincipal();
         Date now = new Date(System.currentTimeMillis());
         Date expiryDate = new Date(now.getTime() + SecurityConstants.EXPIRATION_TIME);
 
-        String userID = Long.toString(user.getId());
+        String userId = Long.toString(user.getId());
 
         Map<String, Object> claimsMap = new HashMap<>();
-        claimsMap.put("id", userID);
-        //TODO: Getusername or Getemail
-        claimsMap.put("username", user.getUsername());
+        claimsMap.put("id", userId);
+        claimsMap.put("username", user.getEmail());
         claimsMap.put("firstname", user.getName());
         claimsMap.put("lastname", user.getLastname());
 
         return Jwts.builder()
-                .setSubject(userID)
-                .setClaims(claimsMap)
+                .setSubject(userId)
+                .addClaims(claimsMap)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(SignatureAlgorithm.HS512, SecurityConstants.SECRET)
                 .compact();
+
     }
 
     public boolean validateToken(String token) {
         try {
             Jwts.parser()
                     .setSigningKey(SecurityConstants.SECRET)
-                    .parseClaimsJwt(token);
+                    .parseClaimsJws(token);
             return true;
-        } catch (SignatureException | MalformedJwtException |
-                 ExpiredJwtException | UnsupportedJwtException |
-                 IllegalArgumentException ex) {
+        }catch (SignatureException |
+                MalformedJwtException |
+                ExpiredJwtException |
+                UnsupportedJwtException |
+                IllegalArgumentException ex) {
             LOG.error(ex.getMessage());
             return false;
         }
@@ -55,9 +57,10 @@ public class JWTTokenProvider {
     public Long getUserIdFromToken(String token) {
         Claims claims = Jwts.parser()
                 .setSigningKey(SecurityConstants.SECRET)
-                .parseClaimsJwt(token)
+                .parseClaimsJws(token)
                 .getBody();
         String id = (String) claims.get("id");
         return Long.parseLong(id);
     }
+
 }

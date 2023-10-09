@@ -1,9 +1,8 @@
 package com.vv.VisualVibes.annotations;
 
 import com.vv.VisualVibes.validations.EmailValidator;
-import jakarta.validation.Constraint;
-import jakarta.validation.Payload;
-
+import javax.validation.Constraint;
+import javax.validation.Payload;
 import java.lang.annotation.*;
 
 @Target({ElementType.TYPE, ElementType.FIELD, ElementType.ANNOTATION_TYPE})
