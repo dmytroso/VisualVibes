@@ -2,11 +2,11 @@ package com.vv.VisualVibes.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.vv.VisualVibes.entity.role.ERole;
-import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.*;
 
