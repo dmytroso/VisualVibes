@@ -13,16 +13,16 @@ import java.util.Map;
 
 @Service
 public class ResponseErrorValidation {
-    public ResponseEntity<Object> mapValidationService(BindingResult resualt) {
-        if (resualt.hasErrors()) {
+    public ResponseEntity<Object> mapValidationService(BindingResult result) {
+        if (result.hasErrors()) {
             Map<String,String> errorMap = new HashMap<>();
 
-            if (!CollectionUtils.isEmpty(resualt.getAllErrors())) {
-                for (ObjectError error : resualt.getAllErrors()) {
+            if (!CollectionUtils.isEmpty(result.getAllErrors())) {
+                for (ObjectError error : result.getAllErrors()) {
                     errorMap.put(error.getCode(), error.getDefaultMessage());
                 }
             }
-            for (FieldError error: resualt.getFieldErrors()) {
+            for (FieldError error: result.getFieldErrors()) {
                 errorMap.put(error.getField(), error.getDefaultMessage());
             }
             return new ResponseEntity<>(errorMap, HttpStatus.BAD_REQUEST);
