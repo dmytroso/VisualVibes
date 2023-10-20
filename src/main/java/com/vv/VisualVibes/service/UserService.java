@@ -1,5 +1,6 @@
 package com.vv.VisualVibes.service;
 
+import com.vv.VisualVibes.dto.UserDTO;
 import com.vv.VisualVibes.entity.User;
 import com.vv.VisualVibes.entity.role.ERole;
 import com.vv.VisualVibes.exception.UserExistException;
@@ -8,8 +9,11 @@ import com.vv.VisualVibes.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.security.Principal;
 
 
 @Service
@@ -25,7 +29,7 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
-    public User createUser(SignUpRequest userIn) {
+    public void createUser(SignUpRequest userIn) {
         User user = new User();
         user.setEmail(userIn.getEmail());
         user.setName(userIn.getFirstname());
@@ -36,10 +40,29 @@ public class UserService {
 
         try {
             LOG.info("Saving User {}", userIn.getEmail());
-            return userRepository.save(user);
+            userRepository.save(user);
         } catch (Exception e) {
             LOG.error("Error during registration. {}", e.getMessage());
             throw  new UserExistException("The user " + userIn.getUsername() + "already exist. Please check credentials");
         }
+    }
+
+    public User updateUser(UserDTO userDTO, Principal principal) {
+        User user = getUserByPrincipal(principal);
+        user.setName(userDTO.getFirstname());
+        user.setLastname(userDTO.getLastname());
+        user.setBio(userDTO.getBio());
+
+        return userRepository.save(user);
+    }
+
+    public User getCurrentUser(Principal principal) {
+        return getUserByPrincipal(principal);
+    }
+
+    private User getUserByPrincipal(Principal principal) {
+        String username = principal.getName();
+        return userRepository.findUserByName(username)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found with username" + username));
     }
 }
