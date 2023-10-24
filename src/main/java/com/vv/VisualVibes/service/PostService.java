@@ -79,14 +79,14 @@ public class PostService {
 
     public void deletePost(Long postId, Principal principal) {
         Post post = getPostById(postId, principal);
-        Optional<Image> image = imageRepository.findByUserId(post.getId());
+        Optional<Image> image = imageRepository.findByPostId(post.getId());
         postRepository.delete(post);
         image.ifPresent(imageRepository::delete);
     }
 
     private User getUserByPrincipal(Principal principal) {
         String username = principal.getName();
-        return userRepository.findUserByName(username)
+        return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found with username" + username));
     }
 }

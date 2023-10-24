@@ -40,7 +40,7 @@ public class CommentService {
                 .orElseThrow(() -> new PostNotFoundException("Post cannot be found for username: " + user.getEmail()));
         Comment comment = new Comment();
         comment.setPost(post);
-        comment.setId(id);
+        comment.setUserId(id);
         comment.setUsername(user.getUsername());
         comment.setMessage(commentDTO.getMessage());
 
@@ -63,7 +63,7 @@ public class CommentService {
 
     private User getUserByPrincipal(Principal principal) {
         String username = principal.getName();
-        return userRepository.findUserByName(username)
+        return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found with username" + username));
     }
 }

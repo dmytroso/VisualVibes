@@ -62,7 +62,12 @@ public class UserService {
 
     private User getUserByPrincipal(Principal principal) {
         String username = principal.getName();
-        return userRepository.findUserByName(username)
+        return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found with username" + username));
+    }
+
+    public User getUserById(long userId) {
+        return userRepository.findUserById(userId)
+                .orElseThrow(() -> new UsernameNotFoundException("Username not found"));
     }
 }

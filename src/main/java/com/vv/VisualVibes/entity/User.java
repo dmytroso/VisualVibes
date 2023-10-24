@@ -13,7 +13,6 @@ import java.util.*;
 @Data
 @Entity
 public class User implements UserDetails {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,27 +22,29 @@ public class User implements UserDetails {
     private String username;
     @Column(nullable = false)
     private String lastname;
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String email;
     @Column(columnDefinition = "text")
     private String bio;
     @Column(length = 3000)
     private String password;
-    @JsonFormat(pattern = "yyyy-mm-dd")
-    @Column(updatable = false)
-    private LocalDateTime createdDate;
 
     @ElementCollection(targetClass = ERole.class)
-    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @CollectionTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"))
     private Set<ERole> roles = new HashSet<>();
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user", orphanRemoval = true)
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "user", orphanRemoval = true)
     private List<Post> posts = new ArrayList<>();
+
+    @JsonFormat(pattern = "yyyy-mm-dd HH:mm:ss")
+    @Column(updatable = false)
+    private LocalDateTime createdDate;
 
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
 
     public User() {
-
     }
 
     public User(Long id,
@@ -58,15 +59,30 @@ public class User implements UserDetails {
         this.authorities = authorities;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", bio='" + bio + '\'' +
+                ", password='" + password + '\'' +
+                ", posts=" + posts +
+                ", createdDate=" + createdDate +
+                ", authorities=" + authorities +
+                '}';
+    }
+
     @PrePersist
     protected void onCreate() {
         this.createdDate = LocalDateTime.now();
     }
 
-
     /**
      * SECURITY
      */
+
 
     @Override
     public String getPassword() {

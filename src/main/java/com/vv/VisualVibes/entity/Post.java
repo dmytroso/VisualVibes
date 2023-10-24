@@ -2,6 +2,7 @@ package com.vv.VisualVibes.entity;
 
 
 import lombok.Data;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -9,8 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Data
 @Entity
+@Data
 public class Post {
 
     @Id
@@ -18,7 +19,6 @@ public class Post {
     private Long id;
     private String title;
     private String caption;
-    private String location;
     private Integer likes;
 
     @Column
@@ -34,9 +34,21 @@ public class Post {
     public Post() {
     }
 
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", caption='" + caption + '\'' +
+                ", likes=" + likes +
+                ", likedUsers=" + likedUsers +
+                ", comments=" + comments +
+                ", createdDate=" + createdDate +
+                '}';
+    }
+
     @PrePersist
-    protected void onCreate()
-    {
+    protected void onCreate() {
         this.createdDate = LocalDateTime.now();
     }
 }
