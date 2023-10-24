@@ -40,7 +40,7 @@ public class CommentService {
                 .orElseThrow(() -> new PostNotFoundException("Post cannot be found for username: " + user.getEmail()));
         Comment comment = new Comment();
         comment.setPost(post);
-        comment.setId(id);
+        comment.setUserId(id);
         comment.setUsername(user.getUsername());
         comment.setMessage(commentDTO.getMessage());
 

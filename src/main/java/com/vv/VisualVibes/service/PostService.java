@@ -79,7 +79,7 @@ public class PostService {
 
     public void deletePost(Long postId, Principal principal) {
         Post post = getPostById(postId, principal);
-        Optional<Image> image = imageRepository.findByUserId(post.getId());
+        Optional<Image> image = imageRepository.findByPostId(post.getId());
         postRepository.delete(post);
         image.ifPresent(imageRepository::delete);
     }

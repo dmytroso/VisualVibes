@@ -20,4 +20,7 @@ public class Image {
     private Long userId;
     @JsonIgnore
     private Long postId;
+
+    public Image() {
+    }
 }
