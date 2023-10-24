@@ -59,6 +59,21 @@ public class User implements UserDetails {
         this.authorities = authorities;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", lastname='" + lastname + '\'' +
+                ", email='" + email + '\'' +
+                ", bio='" + bio + '\'' +
+                ", password='" + password + '\'' +
+                ", posts=" + posts +
+                ", createdDate=" + createdDate +
+                ", authorities=" + authorities +
+                '}';
+    }
+
     @PrePersist
     protected void onCreate() {
         this.createdDate = LocalDateTime.now();
